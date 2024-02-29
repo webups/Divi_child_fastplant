@@ -1,17 +1,15 @@
 <?php
-// Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
-
-// BEGIN ENQUEUE PARENT ACTION
-// AUTO GENERATED - Do not modify or remove comment markers above or below:
-
-if ( !function_exists( 'chld_thm_cfg_parent_css' ) ):
-    function chld_thm_cfg_parent_css() {
-        wp_enqueue_style( 'chld_thm_cfg_parent', trailingslashit( get_template_directory_uri() ) . 'style.css', array(  ) );
-    }
-endif;
-add_action( 'wp_enqueue_scripts', 'chld_thm_cfg_parent_css', 10 );
-
-// END ENQUEUE PARENT ACTION
-
-?>
+// mise à jour suivant https://www.elegantthemes.com/blog/divi-resources/divi-child-theme
+function dt_enqueue_styles() {
+    $parenthandle = 'divi-style'; 
+    $theme = wp_get_theme();
+    wp_enqueue_style( $parenthandle, get_template_directory_uri() . '/style.css', 
+        array(), // if the parent theme code has a dependency, copy it to here
+        $theme->parent()->get('Version')
+    );
+    wp_enqueue_style( 'child-style', get_stylesheet_uri(),
+        array( $parenthandle ),
+        $theme->get('Version') 
+    );
+}
+add_action( 'wp_enqueue_scripts', 'dt_enqueue_styles' );
